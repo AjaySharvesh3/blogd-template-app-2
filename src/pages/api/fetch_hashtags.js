@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 const OpenAIAPI = require("openai");
+const _ = require("lodash");
 
 export default async function handler(req, res) {
   try {
@@ -10,9 +11,9 @@ export default async function handler(req, res) {
 
     let prompt = "";
     if (!!name) {
-      prompt =  `Generate top 30 currently trending Instagram hashtags for ${name}`;
+      prompt = `Generate top 30 currently trending Instagram hashtags for ${name}`;
     } else {
-      prompt = ("Generate 30 common instagram hashtags");
+      prompt = "Generate 30 common instagram hashtags";
     }
 
     if (!apiKey) {
@@ -33,8 +34,18 @@ export default async function handler(req, res) {
         return hashtagMatch ? hashtagMatch[0] : null;
       })
       .filter(Boolean);
+    let categorizedHashtags;
+    if (!!name) {
+      categorizedHashtags = {
+        Best: _.shuffle(hashtagsWithoutNumbers),
+        Popular: _.shuffle(hashtagsWithoutNumbers), // You can replace [] with the actual array for "Popular"
+        Trending: _.shuffle(hashtagsWithoutNumbers), // You can replace [] with the actual array for "Trending"
+      };
+    } else {
+      categorizedHashtags = [...hashtagsWithoutNumbers]
+    }
 
-    res.status(200).json({ name, hashtagsWithoutNumbers });
+    res.status(200).json({ name, hashtagsWithoutNumbers: categorizedHashtags });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

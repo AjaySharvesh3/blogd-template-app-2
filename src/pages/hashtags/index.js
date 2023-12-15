@@ -38,10 +38,12 @@ const Hashtags = () => {
   ];
 
   useEffect(() => {
-    fetchHastags();
+    // fetchHastags();
+    setHashtags(tags)
   }, []);
 
   const fetchHastags = async () => {
+    setLoading(true)
     await axios
       .get("/api/fetch_hashtags")
       .then((res) => {
@@ -139,7 +141,7 @@ const Hashtags = () => {
               ) : (
                 <div class="bg-white rounded-lg">
                   <dl class="grid max-w-screen-xl grid-cols-2 gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-3 sm:p-8">
-                    {tags.map((tag, index) => (
+                    {hashtags.map((tag, index) => (
                       <div
                         key={index}
                         className={`flex items-center justify-center py-2 px-4 rounded-md bg-gray-100`}

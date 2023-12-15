@@ -6,11 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import _ from 'lodash';
+import _ from "lodash";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const tags = [
+const tags = {
+  Best: [
     "#art",
     "#fitness",
     "#yoga",
@@ -31,7 +32,8 @@ const tags = [
     "#yoga",
     "#food",
     "#movie",
-  ];
+  ],
+};
 
 const Tag = () => {
   const router = useRouter();
@@ -39,6 +41,7 @@ const Tag = () => {
   const [hashtags, setHashtags] = useState([]);
   const [loading, setLoading] = useState(false);
   const [choice, setChoice] = useState("Best");
+  // const [initial, setInitial] = useState(false);
 
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -49,27 +52,42 @@ const Tag = () => {
     return array;
   }
 
-  useEffect(()=> {
-    const shuffledTags = shuffleArray(tags);
-    setHashtags(shuffledTags)
-  },[choice])
+  // useEffect(() => {
+  //   if (initial) {
+  //     const choices = ["Popular", "Trending"];
+  //     let newHashtags = {};
+
+  //     for (const choice of choices) {
+  //       const shuffledTags = shuffleArray(hashtags["Best"]);
+  //       newHashtags[choice] = shuffledTags;
+  //       console.log(newHashtags);
+  //     }
+  //     setHashtags((previous) => ({
+  //       ...previous,
+  //       ...newHashtags,
+  //     }));
+  //   }
+  // }, [initial]);
 
   useEffect(() => {
     if (!!name) {
       fetchHastags();
+      // setHashtags(tags);
+      // setInitial(true);
     }
   }, [name]);
 
   const fetchHastags = async () => {
+    setLoading(true);
     await axios
       .get("/api/fetch_hashtags", { params: { name } })
       .then((res) => {
         console.log(res.data.hashtagsWithoutNumbers);
-        setHashtags([...res.data.hashtagsWithoutNumbers]);
+        setHashtags(res.data.hashtagsWithoutNumbers);
         setLoading(false);
       })
       .catch((err) => {});
-      setLoading(false)
+    setLoading(false);
   };
 
   return (
@@ -96,7 +114,7 @@ const Tag = () => {
                 className={`px-3 rounded-full ${
                   choice === "Best" ? "bg-black text-white" : ""
                 }`}
-                onClick={()=>setChoice("Best")}
+                onClick={() => setChoice("Best")}
               >
                 Best
               </button>
@@ -104,7 +122,7 @@ const Tag = () => {
                 className={`px-3 rounded-full ${
                   choice === "Popular" ? "bg-black text-white" : ""
                 }`}
-                onClick={()=>setChoice("Popular")}
+                onClick={() => setChoice("Popular")}
               >
                 Popular
               </button>
@@ -112,7 +130,7 @@ const Tag = () => {
                 className={`px-3 rounded-full ${
                   choice === "Trending" ? "bg-black text-white" : ""
                 }`}
-                onClick={()=>setChoice("Trending")}
+                onClick={() => setChoice("Trending")}
               >
                 Trending
               </button>
@@ -120,7 +138,7 @@ const Tag = () => {
           </div>
           <div class="w-full bg-white border border-gray-200 rounded-lg shadow mt-8">
             <div class="border-t border-gray-200 ">
-            {loading ? (
+              {loading ? (
                 <div role="status" className=" flex justify-center my-4">
                   <svg
                     aria-hidden="true"
@@ -141,27 +159,27 @@ const Tag = () => {
                   <span class="sr-only">Loading...</span>
                 </div>
               ) : (
-              <div class="bg-white rounded-lg">
-                <dl class="grid max-w-screen-xl grid-cols-2 gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-3 sm:p-8">
-                  {hashtags?.map((tag, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-center justify-center py-2 px-4 rounded-md bg-gray-100`}
-                      //   style={{ backgroundColor: getRandomColor(index) }}
-                    >
-                      {tag}
-                      <FontAwesomeIcon
-                        icon={faSearch}
-                        className="text-xs ml-auto cursor-pointer hover:text-gray-500"
-                        onClick={() => {
-                          const url = `/hashtags/${tag.substring(1)}`;
-                          router.push(url);
-                        }}
-                      />
-                    </div>
-                  ))}
-                </dl>
-              </div>
+                <div class="bg-white rounded-lg">
+                  <dl class="grid max-w-screen-xl grid-cols-2 gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-3 sm:p-8">
+                    {hashtags[choice]?.map((tag, index) => (
+                      <div
+                        key={index}
+                        className={`flex items-center justify-center py-2 px-4 rounded-md bg-gray-100`}
+                        //   style={{ backgroundColor: getRandomColor(index) }}
+                      >
+                        {tag}
+                        <FontAwesomeIcon
+                          icon={faSearch}
+                          className="text-xs ml-auto cursor-pointer hover:text-gray-500"
+                          onClick={() => {
+                            const url = `/hashtags/${tag.substring(1)}`;
+                            router.push(url);
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </dl>
+                </div>
               )}
             </div>
           </div>
