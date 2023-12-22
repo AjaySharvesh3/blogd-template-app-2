@@ -1,10 +1,10 @@
 import _ from "lodash";
 import ARTICLES from "../../constants/articles.json";
 import GlobalBlogConfig from "../../config/GlobalBlogConfig.json";
-import TopNav from "@/components/TopNav";
-import PoweredByBlogd from "@/components/PoweredByBlogd";
-import Footer from "@/components/Footer";
-import {cssContent} from "@/constants/style.constants";
+import TopNav from "../../components/TopNav.js";
+import PoweredByBlogd from "../../components/PoweredByBlogd.js";
+import Footer from "../../components/Footer.js";
+import {cssContent} from "../../constants/style.constants.json";
 
 
 const Tag = ({article}) => {
