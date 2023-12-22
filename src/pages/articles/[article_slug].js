@@ -4,7 +4,7 @@ import GlobalBlogConfig from "../../config/GlobalBlogConfig.json";
 import TopNav from "../../components/TopNav.js";
 import PoweredByBlogd from "../../components/PoweredByBlogd.js";
 import Footer from "../../components/Footer.js";
-import {cssContent} from "../../constants/style.constants.json";
+import {cssContent} from "../../constants/style.constants.js";
 
 
 const Tag = ({article}) => {
