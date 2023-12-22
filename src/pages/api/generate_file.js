@@ -74,7 +74,7 @@ export default async function handler(req, res) {
             "#fitness",
           ],
       };
-    const outputDirectory = path.join(__dirname, "../../../../src/pages/hashtags");
+    const outputDirectory = path.join(__dirname, "../../../../src/pages/articles");
     const filePath = path.join(outputDirectory, "generated.js");
     // console.log(fileContent())
     await fs.writeFile(filePath, fileContent(str, tags));

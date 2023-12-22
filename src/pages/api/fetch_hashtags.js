@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     if (!!name) {
       prompt = `Generate top 30 currently trending Instagram hashtags for ${name}`;
     } else {
-      prompt = "Generate 30 common instagram hashtags";
+      prompt = "Generate 30 common instagram articles";
     }
 
     if (!apiKey) {
